@@ -32,9 +32,9 @@ to your POM.
 
 Then you can execute any goals:
 
-mvn docker:createContainer
-mvn docker:startContainer
-mvn docker:stopContainer
-mvn docker:removeContainer
+* mvn docker:createContainer
+* mvn docker:startContainer
+* mvn docker:stopContainer
+* mvn docker:removeContainer
 
 At the moment you need to clone the repository and compile for yourself.
