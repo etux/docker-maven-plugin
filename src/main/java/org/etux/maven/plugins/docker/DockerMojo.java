@@ -8,7 +8,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 /**
- * Only works when docker daemon is running on a tcp port (on unix socket support at the moment).
+ * Only works when docker daemon is running on a tcp port (no unix socket support at the moment).
  * @author <a href="mailto:eduardo.devera@gmail.com">Eduardo de Vera</a>
  */
 public abstract class DockerMojo extends AbstractMojo {
