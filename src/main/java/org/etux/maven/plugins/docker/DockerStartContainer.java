@@ -16,35 +16,24 @@ package org.etux.maven.plugins.docker;
  * limitations under the License.
  */
 
-import com.kpelykh.docker.client.DockerClient;
 import com.kpelykh.docker.client.DockerException;
-import com.kpelykh.docker.client.model.ContainerCreateResponse;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
 /**
- * Mojo that enables Maven to start Docker containers.
- *
+ * Enables maven to start the current Docker container.
+ * @author <a href="mailto:eduardo.devera@gmail.com">Eduardo de Vera</a>
  */
-@Mojo(
-        name = "runContainer",
-        defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST
-)
-public class DockerRunMojo extends DockerMojo {
-
-
-    private DockerClient dockerClient;
+@Mojo(name = "startContainer")
+public class DockerStartContainer extends DockerMojo {
 
     public void execute() throws MojoExecutionException {
-        dockerClient = new DockerClient(url);
         try {
-            final ContainerCreateResponse container = dockerClient.createContainer(getContainerConfig());
-            containerId.set(container.getId());
-            addContainer(container.getId());
-            dockerClient.startContainer(container.getId());
+            createContainer();
+            startContainer();
         } catch (DockerException e) {
-            throw new MojoExecutionException("Error starting container image "+containerImage+" on host on URL "+url, e);
+            throw new MojoExecutionException(
+                    String.format("Error starting container image %s", getContainerImage()), e);
         }
     }
 }

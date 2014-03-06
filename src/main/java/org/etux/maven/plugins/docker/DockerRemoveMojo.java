@@ -6,16 +6,15 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 
 /**
- * Enables maven to stop the current Docker container.
+ * Allows maven to remove the current Docker container.
  * @author <a href="mailto:eduardo.devera@gmail.com">Eduardo de Vera</a>
  */
-@Mojo(name = "stopContainer")
-public class DockerStopMojo extends DockerMojo{
+@Mojo(name = "removeContainer")
+public class DockerRemoveMojo extends DockerMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
-            stopContainer();
             removeContainer();
         } catch (DockerException e) {
             throw new MojoExecutionException(

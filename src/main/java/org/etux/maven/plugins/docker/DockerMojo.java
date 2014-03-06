@@ -1,9 +1,9 @@
 package org.etux.maven.plugins.docker;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import com.kpelykh.docker.client.DockerClient;
+import com.kpelykh.docker.client.DockerException;
 import com.kpelykh.docker.client.model.ContainerConfig;
+import com.kpelykh.docker.client.model.ContainerCreateResponse;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
@@ -13,36 +13,93 @@ import org.apache.maven.plugins.annotations.Parameter;
  */
 public abstract class DockerMojo extends AbstractMojo {
 
-    static final ThreadLocal<String> containerId = new ThreadLocal<String>();
+    //TODO find out the default port for docker when listening to network ports.
+    private static final String DEFAULT_URL = "http://localhost:4243";
 
-    private List<String> dockerContainerIds;
+    //package protected so that only classes inside the package can access it.
+    private static final ThreadLocal<String> tlContainerId = new ThreadLocal<String>();
 
-    @Parameter(defaultValue="http://localhost:4243")
-    String url;
+    @Parameter(defaultValue = DEFAULT_URL)
+    private String url;
+
     @Parameter(required = true)
-    String containerImage;
+    private String containerImage;
 
-    ContainerConfig containerConfig;
+    private ContainerConfig containerConfig;
 
-    public DockerMojo() {
-        dockerContainerIds = new LinkedList<String>();
-    }
+    private DockerClient dockerClient;
 
-    public void addContainer(String container) {
-        dockerContainerIds.add(container);
-    }
-
-    public void removeContainer(String container) {
-        dockerContainerIds.remove(container);
+    public String getContainerImage() {
+        return containerImage;
     }
 
     public ContainerConfig getContainerConfig() {
         if (containerConfig == null) {
             containerConfig = new ContainerConfig();
-            containerConfig.setHostName(url);
-            containerConfig.setImage(containerImage);
+            containerConfig.setHostName(getUrl());
+            containerConfig.setImage(getContainerImage());
             containerConfig.setCmd(new String[] {"true"});
         }
         return containerConfig;
+    }
+
+    private String getUrl() {
+        if (url == null) url = DEFAULT_URL;
+        return url;
+    }
+
+    DockerClient getDockerClient() {
+        if (dockerClient == null) dockerClient = new DockerClient(url);
+        return dockerClient;
+    }
+
+    /**
+     * Creates a container in Docker and stores the container id in a ThreadLocal variable
+     * so that it can be accessed by other goals of the plugin.
+     * @throws DockerException
+     */
+    void createContainer() throws DockerException {
+        getLog().debug(String.format("Creating new container"));
+        final ContainerCreateResponse response = getDockerClient().createContainer(getContainerConfig());
+        final String containerId = response.getId();
+        getLog().info(String.format("Created container with id %s", containerId));
+        DockerMojo.tlContainerId.set(containerId);
+    }
+
+    void startContainer() throws DockerException {
+        getLog().debug(String.format("Trying to start container %s", getContainerId()));
+        if (getContainerId() == null) throw new RuntimeException("There isn't any container id set.");
+        getDockerClient().startContainer(getContainerId());
+    }
+
+    void stopContainer() throws DockerException {
+        getLog().debug(String.format("Trying to stop container %s", getContainerId()));
+        if (getContainerId() == null) throw new RuntimeException("There isn't any container id set.");
+        getDockerClient().stopContainer(getContainerId());
+    }
+
+    void removeContainer() throws DockerException {
+        getLog().debug(String.format("Trying to remove container %s", getContainerId()));
+        if (getContainerId() == null) throw new RuntimeException("There isn't any container id set.");
+        final String containerId = this.getContainerId();
+        getDockerClient().removeContainer(containerId);
+        DockerMojo.tlContainerId.set(null);
+        getLog().info(String.format("Container %s has been removed", containerId));
+    }
+
+    String getContainerId() {
+        return DockerMojo.tlContainerId.get();
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                          For testing purposes                                                  //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    void setDockerClient(DockerClient dockerClient) {
+        this.dockerClient = dockerClient;
+    }
+
+    void setContainerConfig(ContainerConfig containerConfig) {
+        this.containerConfig = containerConfig;
     }
 }
