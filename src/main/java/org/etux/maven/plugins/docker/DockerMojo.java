@@ -6,7 +6,6 @@ import com.kpelykh.docker.client.model.ContainerConfig;
 import com.kpelykh.docker.client.model.ContainerCreateResponse;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import sun.plugin.dom.exception.InvalidStateException;
 
 /**
  * Only works when docker daemon is running on a tcp port (no unix socket support at the moment).
@@ -127,7 +126,7 @@ public abstract class DockerMojo extends AbstractMojo {
     }
 
     private void validateContainerId() {
-        if (getContainerId() == null) throw new InvalidStateException("There isn't any container id set.");
+        if (getContainerId() == null) throw new IllegalStateException("There isn't any container id set.");
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,6 +159,8 @@ public abstract class DockerMojo extends AbstractMojo {
             containerConfig.setVolumes(getVolumes());
             containerConfig.setVolumesFrom(getVolumesFrom());
             containerConfig.setWorkingDir(getWorkingDir());
+            getLog().debug(
+                    String.format("Container configuration: \n%s", containerConfig.toString()));
         }
         return containerConfig;
     }
