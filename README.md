@@ -35,13 +35,13 @@ to your POM.
 
 Then you can execute any goals:
 
-* mvn docker:pullImage -DcontainerImage=<containerImage>
-* mvn docker:createContainer -DcontainerImage=<containerImage>
-* mvn docker:startContainer -DcontainerId=<containerId>
-* mvn docker:stopContainer -DcontainerId=<containerId>
-* mvn docker:restartContainer -DcontainerId=<containerId>
-* mvn docker:removeContainer -DcontainerId=<containerId>
-* mvn docker:killContainer -DcontainerId=<containerId>
+* mvn docker:pullImage -DcontainerImage=&lt;containerImage&gt;
+* mvn docker:createContainer -DcontainerImage=&lt;containerImage&gt;
+* mvn docker:startContainer -DcontainerId=&lt;containerId&gt;
+* mvn docker:stopContainer -DcontainerId=&lt;containerId&gt;
+* mvn docker:restartContainer -DcontainerId=&lt;containerId&gt;
+* mvn docker:removeContainer -DcontainerId=&lt;containerId&gt;
+* mvn docker:killContainer -DcontainerId=&lt;containerId&gt;
 
 In case two different goals are executed as part of the same Maven session, then these two will share the containerId. In fact createContainer will set the containerId in a ThreadLocal variable so that other goals of the plugin that are executed afterwards can pick it up.
 
