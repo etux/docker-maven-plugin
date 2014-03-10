@@ -12,11 +12,10 @@ Initial implementation should cover:
 - create container
 - remove container
 
-Support for both network(i.e. for MacOS)  and unix sockets (i.e. Linux).
-
 In order to use, add 
 
-<plugins>
+<pre>
+  <plugins>
     <plugin>
         <groupId>org.etux.maven.plugins</groupId>
         <artifactId>docker-maven-plugin</artifactId>
@@ -26,7 +25,8 @@ In order to use, add
             <containerImage>ubuntu</containerImage>
         </configuration>
     </plugin>
-</plugins>
+  </plugins>
+</pre>
 
 to your POM.
 
