@@ -3,9 +3,9 @@ docker-maven-plugin
 
 Maven plugin to interact with Docker.
 
-The idea of this plugin is to be able to operate Docker from Maven.
+The idea of this plugin is to be able to operate Docker from Maven. All elements of the ContainerConfig are supported.
 
-Initial implementation should cover:
+Initial implementation should covers:
 
 - start container
 - stop container
@@ -14,8 +14,8 @@ Initial implementation should cover:
 
 In order to use, add 
 
-<pre>
-  <plugins>
+```xml
+<plugins>
     <plugin>
         <groupId>org.etux.maven.plugins</groupId>
         <artifactId>docker-maven-plugin</artifactId>
@@ -25,8 +25,8 @@ In order to use, add
             <containerImage>ubuntu</containerImage>
         </configuration>
     </plugin>
-  </plugins>
-</pre>
+</plugins>
+```
 
 to your POM.
 
