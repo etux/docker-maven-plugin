@@ -10,8 +10,10 @@ Initial implementation should covers:
 - pull image
 - start container
 - stop container
+- restart container
 - create container
 - remove container
+- kill container
 
 In order to use, add 
 
@@ -33,10 +35,14 @@ to your POM.
 
 Then you can execute any goals:
 
-* mvn docker:pullImage
-* mvn docker:createContainer
-* mvn docker:startContainer
-* mvn docker:stopContainer
-* mvn docker:removeContainer
+* mvn docker:pullImage -DcontainerImage=<containerImage>
+* mvn docker:createContainer -DcontainerImage=<containerImage>
+* mvn docker:startContainer -DcontainerId=<containerId>
+* mvn docker:stopContainer -DcontainerId=<containerId>
+* mvn docker:restartContainer -DcontainerId=<containerId>
+* mvn docker:removeContainer -DcontainerId=<containerId>
+* mvn docker:killContainer -DcontainerId=<containerId>
+
+In case two different goals are executed as part of the same Maven session, then these two will share the containerId. In fact createContainer will set the containerId in a ThreadLocal variable so that other goals of the plugin that are executed afterwards can pick it up.
 
 At the moment you need to clone the repository and compile for yourself.
