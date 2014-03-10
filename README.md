@@ -7,6 +7,7 @@ The idea of this plugin is to be able to operate Docker from Maven. All elements
 
 Initial implementation should covers:
 
+- pull image
 - start container
 - stop container
 - create container
@@ -32,6 +33,7 @@ to your POM.
 
 Then you can execute any goals:
 
+* mvn docker:pullImage
 * mvn docker:createContainer
 * mvn docker:startContainer
 * mvn docker:stopContainer
