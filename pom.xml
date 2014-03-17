@@ -14,13 +14,25 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <docker-java.version>0.8.1</docker-java.version>
+        <junit.version>4.11</junit.version>
+        <mockito-core.version>1.9.5</mockito-core.version>
+        <slf4j-simple.version>1.7.6</slf4j-simple.version>
+        <plexus-utils.version>3.0.8</plexus-utils.version>
+        <maven-plugin-annotations.version>3.2</maven-plugin-annotations.version>
+        <commons-lang.version>2.6</commons-lang.version>
     </properties>
 
     <dependencies>
         <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>${commons-lang.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.kpelykh</groupId>
             <artifactId>docker-java</artifactId>
-            <version>0.8.1</version>
+            <version>${docker-java.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -30,29 +42,29 @@
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
-            <version>3.2</version>
+            <version>${maven-plugin-annotations.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>
-            <version>3.0.8</version>
+            <version>${plexus-utils.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.6</version>
+            <version>${slf4j-simple.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>1.9.5</version>
+            <version>${mockito-core.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -70,7 +82,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>3.2</version>
+                <version>${maven-plugin-annotations.version}</version>
                 <configuration>
                     <goalPrefix>docker</goalPrefix>
                     <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
@@ -101,7 +113,7 @@
                 </os>
             </activation>
             <properties>
-                <docker-maven-plugin.configuration.url>http://192.168.1.111:4342</docker-maven-plugin.configuration.url>
+                <docker-maven-plugin.configuration.url>http://localhost:4243</docker-maven-plugin.configuration.url>
             </properties>
         </profile>
         <profile>
@@ -124,8 +136,13 @@
                         <artifactId>docker-maven-plugin</artifactId>
                         <version>0.0.1-SNAPSHOT</version>
                         <configuration>
+                            <attachedMode>true</attachedMode>
                             <url>${docker-maven-plugin.configuration.url}</url>
                             <containerImage>ubuntu</containerImage>
+                            <containerId>a757615945ecbc6a175089268fce7a6947dd50098f4c6f955cd3f32d3575554a</containerId>
+                            <cmds>
+                                <param>echo "Hello World of maven docker plugin"</param>
+                            </cmds>
                         </configuration>
                     </plugin>
                 </plugins>
