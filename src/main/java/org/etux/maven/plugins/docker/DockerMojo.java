@@ -1,9 +1,18 @@
 package org.etux.maven.plugins.docker;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import com.kpelykh.docker.client.DockerClient;
 import com.kpelykh.docker.client.DockerException;
 import com.kpelykh.docker.client.model.ContainerConfig;
 import com.kpelykh.docker.client.model.ContainerCreateResponse;
+import com.sun.jersey.api.client.ClientResponse;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
@@ -22,6 +31,8 @@ public abstract class DockerMojo extends AbstractMojo {
     private ContainerConfig containerConfig;
     private DockerClient dockerClient;
 
+    @Parameter
+    private boolean attachedMode;
     @Parameter(defaultValue = DEFAULT_URL)
     private String url;
     @Parameter(required = true)
@@ -68,10 +79,12 @@ public abstract class DockerMojo extends AbstractMojo {
     private String volumesFrom;
     @Parameter
     private String workingDir;
-    @Parameter
+    @Parameter(required=true)
     private String[] cmds;
     @Parameter
     private int timeout;
+    @Parameter
+    private String containerId;
 
 
     /**
@@ -90,8 +103,49 @@ public abstract class DockerMojo extends AbstractMojo {
 
     void startContainer() throws DockerException {
         getLog().debug(String.format("Trying to start container %s", getContainerId()));
-        if (getContainerId() == null) throw new RuntimeException("There isn't any container id set.");
+        validateContainerId();
         getDockerClient().startContainer(getContainerId());
+        if (attachedMode) {
+            attachContainer();
+        }
+        getDockerClient().waitContainer(getContainerId());
+    }
+
+    private void attachContainer() throws DockerException {
+        getLog().debug(String.format("Trying to attach container %s", getContainerId()));
+        validateContainerId();
+        final ClientResponse clientResponse = getDockerClient().logContainerStream(getContainerId());
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            public void run() {
+                byte[] bytes = new byte[128];
+                InputStream is = clientResponse.getEntityInputStream();
+                InputStreamReader reader = null;
+                BufferedReader bufferedReader = null;
+                try {
+                    reader = new InputStreamReader(is, "utf-8");
+                    bufferedReader = new BufferedReader(new InputStreamReader(is));
+                    String line = null;
+                    do {
+                        line = bufferedReader.readLine();
+                        if (line != null) getLog().info(String.format("Docker instance %s : %s", getContainerId(), line));
+                    } while (line != null);
+                } catch (IOException e) {
+                    getLog().warn("Impossible to log the container");
+                } finally {
+                    try {
+                        if (bufferedReader != null) bufferedReader.close();
+                        if (reader != null) reader.close();
+                        if (is != null) is.close();
+                    } catch (Exception e) {}
+                }
+            }
+        });
+        try {
+            executor.awaitTermination(1000, TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+
+        }
     }
 
     void stopContainer() throws DockerException {
@@ -125,6 +179,12 @@ public abstract class DockerMojo extends AbstractMojo {
         getLog().info(String.format("Container %s has been restarted", getContainerId()));
     }
 
+    void pullImage() throws DockerException {
+        getLog().debug(String.format("Trying to pull %s image", getContainerImage()));
+        getDockerClient().pull(getContainerImage());
+        getLog().info(String.format("Image %s successfully pulled", getContainerImage()));
+    }
+
     private void validateContainerId() {
         if (getContainerId() == null) throw new IllegalStateException("There isn't any container id set.");
     }
@@ -135,30 +195,29 @@ public abstract class DockerMojo extends AbstractMojo {
     public ContainerConfig getContainerConfig() {
         if (containerConfig == null) {
             containerConfig = new ContainerConfig();
-            containerConfig.setHostName(getUrl());
-            containerConfig.setCmd(getCmds());
-            containerConfig.setAttachStderr(isStderr());
+            if (getCmds() != null)  containerConfig.setCmd(getCmds());
             containerConfig.setAttachStdin(isStdin());
-            containerConfig.setAttachStdout(isStdout());
+            containerConfig.setAttachStderr(isStderr());
             containerConfig.setCpuShares(getCpuShares());
-            containerConfig.setDns(getDnss());
-            containerConfig.setEntrypoint(getEntryPoints());
-            containerConfig.setEnv(getEnvs());
-            containerConfig.setHostName(getHostname());
-            containerConfig.setImage(getContainerImage());
+            containerConfig.setAttachStdout(isStdout());
+            if (getDnss() != null) containerConfig.setDns(getDnss());
+            if (getEntryPoints() != null) containerConfig.setEntrypoint(getEntryPoints());
+            if (getEnvs() != null) containerConfig.setEnv(getEnvs());
+            if (getHostname() != null) containerConfig.setHostName(getHostname());
+            if (getContainerImage() != null) containerConfig.setImage(getContainerImage());
             containerConfig.setMemoryLimit(getMemoryLimit());
             containerConfig.setMemorySwap(getMemorySwap());
             containerConfig.setNetworkDisabled(isNetworkDisabled());
-            containerConfig.setOnBuild(getOnBuild());
-            containerConfig.setPortSpecs(getPortSpecs());
+            if (getOnBuild() != null) containerConfig.setOnBuild(getOnBuild());
+            if (getPortSpecs() != null) containerConfig.setPortSpecs(getPortSpecs());
             containerConfig.setPrivileged(isPrivileged());
             containerConfig.setStdInOnce(isStdInOnce());
             containerConfig.setStdinOpen(isStdInOpen());
             containerConfig.setTty(isTty());
-            containerConfig.setUser(getUser());
-            containerConfig.setVolumes(getVolumes());
-            containerConfig.setVolumesFrom(getVolumesFrom());
-            containerConfig.setWorkingDir(getWorkingDir());
+            if (getUser() != null) containerConfig.setUser(getUser());
+            if (getVolumes() != null) containerConfig.setVolumes(getVolumes());
+            if (getVolumesFrom() != null) containerConfig.setVolumesFrom(getVolumesFrom());
+            if (getWorkingDir() != null) containerConfig.setWorkingDir(getWorkingDir());
             getLog().debug(
                     String.format("Container configuration: \n%s", containerConfig.toString()));
         }
@@ -166,7 +225,7 @@ public abstract class DockerMojo extends AbstractMojo {
     }
 
     String getContainerId() {
-        return DockerMojo.tlContainerId.get();
+        return DockerMojo.tlContainerId.get() != null ? DockerMojo.tlContainerId.get() : containerId;
     }
 
     public String getContainerImage() {
@@ -373,6 +432,13 @@ public abstract class DockerMojo extends AbstractMojo {
         this.cmds = cmds;
     }
 
+    public boolean isAttachedMode() {
+        return attachedMode;
+    }
+
+    public void setAttachedMode(boolean attachedMode) {
+        this.attachedMode = attachedMode;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //                          For testing purposes                                                  //
