@@ -9,10 +9,11 @@ import org.apache.maven.plugins.annotations.Mojo;
  * Enables maven to create a container in Docker.
  * @author <a href="mailto:eduardo.devera@gmail.com">Eduardo de Vera</a>
  */
-@Mojo(name = "createContainer")
+@Mojo(name = DockerCreateMojo.MOJO_NAME)
 public class DockerCreateMojo extends DockerMojo {
 
-    @Override
+    static final String MOJO_NAME = "createContainer";
+
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
             createContainer();

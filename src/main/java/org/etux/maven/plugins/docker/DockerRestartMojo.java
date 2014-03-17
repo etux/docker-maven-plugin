@@ -9,11 +9,12 @@ import org.apache.maven.plugins.annotations.Mojo;
  * Enables maven to create a container in Docker.
  * @author <a href="mailto:eduardo.devera@gmail.com">Eduardo de Vera</a>
  */
-@Mojo(name="restartContainer")
+@Mojo(name= DockerRestartMojo.MOJO_NAME)
 public class DockerRestartMojo extends DockerMojo{
 
 
-    @Override
+    protected static final String MOJO_NAME = "restartContainer";
+
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
             restartContainer();

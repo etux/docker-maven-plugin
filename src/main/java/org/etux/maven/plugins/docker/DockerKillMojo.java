@@ -9,10 +9,11 @@ import org.apache.maven.plugins.annotations.Mojo;
  * Enables maven to kill the current Docker container.
  * @author <a href="mailto:eduardo.devera@gmail.com">Eduardo de Vera</a>
  */
-@Mojo(name="killContainer")
+@Mojo(name= DockerKillMojo.MOJO_NAME)
 public class DockerKillMojo extends DockerMojo {
 
-    @Override
+    static final String MOJO_NAME = "killContainer";
+
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
             killContainer();

@@ -24,12 +24,14 @@ import org.apache.maven.plugins.annotations.Mojo;
  * Enables maven to start the current Docker container.
  * @author <a href="mailto:eduardo.devera@gmail.com">Eduardo de Vera</a>
  */
-@Mojo(name = "startContainer")
+@Mojo(name = DockerStartContainer.MOJO_NAME)
 public class DockerStartContainer extends DockerMojo {
+
+    protected static final String MOJO_NAME = "startContainer";
 
     public void execute() throws MojoExecutionException {
         try {
-            createContainer();
+            //createContainer();
             startContainer();
         } catch (DockerException e) {
             throw new MojoExecutionException(

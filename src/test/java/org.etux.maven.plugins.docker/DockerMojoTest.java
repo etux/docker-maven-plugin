@@ -36,7 +36,7 @@ public class DockerMojoTest {
         containerId = RandomStringUtils.random(16);
         original = new DockerMojo() {
             boolean executed = false;
-            @Override
+
             public void execute() throws MojoExecutionException, MojoFailureException {
                 executed = true;
             }

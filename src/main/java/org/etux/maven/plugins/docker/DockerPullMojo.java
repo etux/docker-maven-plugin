@@ -6,21 +6,22 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 
 /**
- * Enables maven to stop the current Docker container.
  * @author <a href="mailto:eduardo.devera@gmail.com">Eduardo de Vera</a>
+ *         Date: 09/03/14
+ *         Time: 21:29
  */
-@Mojo(name = DockerStopMojo.MOJO_NAME)
-public class DockerStopMojo extends DockerMojo{
+@Mojo(name= DockerPullMojo.MOJO_NAME)
+public class DockerPullMojo extends DockerMojo {
 
-    protected static final String MOJO_NAME = "stopContainer";
+    static final String MOJO_NAME = "pullImage";
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
-            stopContainer();
-            //removeContainer();
-        } catch (DockerException e) {
+         pullImage();
+        } catch (DockerException dockerException) {
             throw new MojoExecutionException(
-                    String.format("Error while trying to remove container %s", getContainerId()), e);
+                    String.format("Exception while pulling image"),
+                    dockerException);
         }
     }
 }

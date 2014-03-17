@@ -9,10 +9,11 @@ import org.apache.maven.plugins.annotations.Mojo;
  * Allows maven to remove the current Docker container.
  * @author <a href="mailto:eduardo.devera@gmail.com">Eduardo de Vera</a>
  */
-@Mojo(name = "removeContainer")
+@Mojo(name = DockerRemoveMojo.MOJO_NAME)
 public class DockerRemoveMojo extends DockerMojo {
 
-    @Override
+    protected static final String MOJO_NAME = "removeContainer";
+
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
             removeContainer();
