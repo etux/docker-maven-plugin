@@ -25,7 +25,6 @@ public abstract class DockerMojo extends AbstractMojo {
     //TODO find out the default port for docker when listening to network ports.
     private static final String DEFAULT_URL = "http://localhost:4243";
 
-    //package protected so that only classes inside the package can access it.
     private static final ThreadLocal<String> tlContainerId = new ThreadLocal<String>();
 
     private ContainerConfig containerConfig;
