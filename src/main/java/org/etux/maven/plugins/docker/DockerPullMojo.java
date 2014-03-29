@@ -17,7 +17,7 @@ public class DockerPullMojo extends DockerMojo {
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
-         pullImage();
+            pullImage();
         } catch (DockerException dockerException) {
             throw new MojoExecutionException(
                     String.format("Exception while pulling image"),

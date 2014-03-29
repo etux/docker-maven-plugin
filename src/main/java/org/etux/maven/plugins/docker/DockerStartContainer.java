@@ -31,7 +31,6 @@ public class DockerStartContainer extends DockerMojo {
 
     public void execute() throws MojoExecutionException {
         try {
-            //createContainer();
             startContainer();
         } catch (DockerException e) {
             throw new MojoExecutionException(

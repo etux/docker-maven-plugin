@@ -122,20 +122,20 @@ public abstract class DockerMojo extends AbstractMojo {
                 InputStreamReader reader = null;
                 BufferedReader bufferedReader = null;
                 try {
-                    reader = new InputStreamReader(is, "utf-8");
+                    reader = new InputStreamReader(is, "UTF-8");
                     bufferedReader = new BufferedReader(new InputStreamReader(is));
                     String line = null;
                     do {
                         line = bufferedReader.readLine();
-                        if (line != null) getLog().info(String.format("Docker instance %s : %s", getContainerId(), line));
+                        if (line != null) getLog().info(String.format("docker[%s]: %s", getContainerId(), line));
                     } while (line != null);
                 } catch (IOException e) {
                     getLog().warn("Impossible to log the container");
                 } finally {
                     try {
-                        if (bufferedReader != null) bufferedReader.close();
-                        if (reader != null) reader.close();
-                        if (is != null) is.close();
+                        try { if (bufferedReader != null) bufferedReader.close(); } catch (IOException ioe) {}
+                        try { if (reader != null) reader.close(); } catch (IOException ioe) {}
+                        try { if (is != null) is.close(); } catch (IOException ioe) {}
                     } catch (Exception e) {}
                 }
             }

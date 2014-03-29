@@ -17,7 +17,6 @@ public class DockerStopMojo extends DockerMojo{
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
             stopContainer();
-            //removeContainer();
         } catch (DockerException e) {
             throw new MojoExecutionException(
                     String.format("Error while trying to remove container %s", getContainerId()), e);
