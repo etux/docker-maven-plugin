@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.etux.maven.plugins</groupId>
@@ -107,7 +106,7 @@
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-jgitflow-plugin</artifactId>
                 <version>1.0-alpha27</version>
-                <configuration></configuration>
+                <configuration />
             </plugin>
         </plugins>
     </build>
@@ -131,7 +130,7 @@
                 </os>
             </activation>
             <properties>
-                <docker-maven-plugin.configuration.url>>http://localhost:4243</docker-maven-plugin.configuration.url>
+                <docker-maven-plugin.configuration.url>&gt;http://localhost:4243</docker-maven-plugin.configuration.url>
                 <!--
                     When unix sockets are supported.
                     <docker-maven-plugin.configuration.url>unix://</docker-maven-plugin.configuration.url>
