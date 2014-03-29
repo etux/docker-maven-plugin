@@ -103,6 +103,12 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-jgitflow-plugin</artifactId>
+                <version>1.0-alpha27</version>
+                <configuration></configuration>
+            </plugin>
         </plugins>
     </build>
     <profiles>
@@ -125,7 +131,11 @@
                 </os>
             </activation>
             <properties>
-                <docker-maven-plugin.configuration.url>unix://</docker-maven-plugin.configuration.url>
+                <docker-maven-plugin.configuration.url>>http://localhost:4243</docker-maven-plugin.configuration.url>
+                <!--
+                    When unix sockets are supported.
+                    <docker-maven-plugin.configuration.url>unix://</docker-maven-plugin.configuration.url>
+                -->
             </properties>
         </profile>
         <profile>
@@ -183,4 +193,18 @@
             </build>
         </profile>
     </profiles>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>atlas-central</id>
+            <url>https://maven.atlassian.com/content/repositories/central</url>
+            <releases>
+                <checksumPolicy>fail</checksumPolicy>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <checksumPolicy>fail</checksumPolicy>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
