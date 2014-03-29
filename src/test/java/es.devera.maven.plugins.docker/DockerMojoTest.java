@@ -1,4 +1,4 @@
-package org.etux.maven.plugins.docker;
+package es.devera.maven.plugins.docker;
 
 
 import com.kpelykh.docker.client.DockerClient;

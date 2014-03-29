@@ -1,4 +1,4 @@
-package org.etux.maven.plugins.docker;
+package es.devera.maven.plugins.docker;
 
 import com.kpelykh.docker.client.DockerException;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -9,17 +9,17 @@ import org.apache.maven.plugins.annotations.Mojo;
  * Enables maven to create a container in Docker.
  * @author <a href="mailto:eduardo.devera@gmail.com">Eduardo de Vera</a>
  */
-@Mojo(name= DockerRestartMojo.MOJO_NAME)
-public class DockerRestartMojo extends DockerMojo{
+@Mojo(name = DockerCreateMojo.MOJO_NAME)
+public class DockerCreateMojo extends DockerMojo {
 
-
-    protected static final String MOJO_NAME = "restartContainer";
+    static final String MOJO_NAME = "createContainer";
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
-            restartContainer();
+            createContainer();
         } catch (DockerException e) {
-            throw new MojoExecutionException("Error restarting the container", e);
+            throw new MojoExecutionException(
+                    String.format("Error while trying to remove container %s", getContainerId()), e);
         }
     }
 }

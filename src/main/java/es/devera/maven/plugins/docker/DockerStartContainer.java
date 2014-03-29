@@ -1,4 +1,4 @@
-package org.etux.maven.plugins.docker;
+package es.devera.maven.plugins.docker;
 
 /*
  * Copyright 2001-2005 The Apache Software Foundation.

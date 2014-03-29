@@ -16,45 +16,97 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.etux.maven.plugins</groupId>
+                <groupId>es.devera.maven.plugins</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
                 <executions>
                     <execution>
-                        <id>run</id>
+                        <id>create-container</id>
+                        <phase>pre-integration-test</phase>
                         <goals>
-                            <goal>runContainer</goal>
+                            <goal>createContainer</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>stop</id>
+                        <id>start-container</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>startContainer</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop-container</id>
+                        <phase>post-integration-test</phase>
                         <goals>
                             <goal>stopContainer</goal>
                         </goals>
                     </execution>
-                </executions>
-                <configuration>
-                    <url>http://192.168.1.111:4342</url>
-                    <containerImage>ubuntu</containerImage>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.groovy.maven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <version>1.0</version>
-                <executions>
                     <execution>
-                        <id>execute-integration-test</id>
-                        <phase>integration-test</phase>
+                        <id>remove-container</id>
+                        <phase>post-integration-test</phase>
                         <goals>
-                            <goal>execute</goal>
+                            <goal>removeContainer</goal>
                         </goals>
-                        <configuration>
-                            <source>${basedir}/src/it/groovy/verify.groovy</source>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <attachedMode>true</attachedMode>
+                    <url>${docker-maven-plugin.configuration.url}</url>
+                    <containerImage>ubuntu</containerImage>
+                    <stdin>true</stdin>
+                    <stderr>true</stderr>
+                    <stdout>true</stdout>
+                    <tty>true</tty>
+                    <cmds>
+                        <param>/bin/bash</param>
+                    </cmds>
+                </configuration>
             </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.groovy.maven</groupId>-->
+                <!--<artifactId>gmaven-plugin</artifactId>-->
+                <!--<version>1.0</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>execute-integration-test</id>-->
+                        <!--<phase>integration-test</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>execute</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<source>${basedir}/src/it/groovy/verify.groovy</source>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>mac</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <properties>
+                <docker-maven-plugin.configuration.url>http://localhost:4243</docker-maven-plugin.configuration.url>
+            </properties>
+        </profile>
+        <profile>
+            <id>linux</id>
+            <activation>
+                <os>
+                    <family>linux</family>
+                </os>
+            </activation>
+            <properties>
+                <docker-maven-plugin.configuration.url>http://localhost:4243</docker-maven-plugin.configuration.url>
+                <!--
+                    When unix sockets are supported.
+                    <docker-maven-plugin.configuration.url>unix://</docker-maven-plugin.configuration.url>
+                -->
+            </properties>
+        </profile>
+    </profiles>
 </project>

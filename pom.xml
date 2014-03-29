@@ -1,15 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.etux.maven.plugins</groupId>
+    <groupId>es.devera.maven.plugins</groupId>
     <artifactId>docker-maven-plugin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>docker-maven-plugin Maven Plugin</name>
 
-    <!-- FIXME change it to the project's website -->
-    <url>http://maven.apache.org</url>
+    <url>http://maven-plugins.devera.es/docker-maven-plugin</url>
+
+    <scm>
+        <url>scm:git:https://github.com/etux/docker-maven-plugin.git</url>
+        <developerConnection>scm:git:https://github.com/etux/docker-maven-plugin.git</developerConnection>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -146,86 +150,4 @@
             </plugin>
         </plugins>
     </build>
-    <profiles>
-        <profile>
-            <id>mac</id>
-            <activation>
-                <os>
-                    <family>mac</family>
-                </os>
-            </activation>
-            <properties>
-                <docker-maven-plugin.configuration.url>http://localhost:4243</docker-maven-plugin.configuration.url>
-            </properties>
-        </profile>
-        <profile>
-            <id>linux</id>
-            <activation>
-                <os>
-                    <family>linux</family>
-                </os>
-            </activation>
-            <properties>
-                <docker-maven-plugin.configuration.url>&gt;http://localhost:4243</docker-maven-plugin.configuration.url>
-                <!--
-                    When unix sockets are supported.
-                    <docker-maven-plugin.configuration.url>unix://</docker-maven-plugin.configuration.url>
-                -->
-            </properties>
-        </profile>
-        <profile>
-            <id>integration</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.etux.maven.plugins</groupId>
-                        <artifactId>docker-maven-plugin</artifactId>
-                        <version>0.0.1-SNAPSHOT</version>
-                        <executions>
-                            <execution>
-                                <id>create-container</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>createContainer</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>start-container</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>startContainer</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>stop-container</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>stopContainer</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>remove-container</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>removeContainer</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <attachedMode>true</attachedMode>
-                            <url>${docker-maven-plugin.configuration.url}</url>
-                            <containerImage>ubuntu</containerImage>
-                            <stdin>true</stdin>
-                            <stderr>true</stderr>
-                            <stdout>true</stdout>
-                            <tty>true</tty>
-                            <cmds>
-                                <param>/bin/bash</param>
-                            </cmds>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>
