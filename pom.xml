@@ -21,6 +21,7 @@
         <maven-plugin-annotations.version>3.2</maven-plugin-annotations.version>
         <commons-lang.version>2.6</commons-lang.version>
         <maven-plugin-api.version>2.0</maven-plugin-api.version>
+        <maven-jgitflow-plugin.version>1.0-alpha27</maven-jgitflow-plugin.version>
     </properties>
 
     <dependencies>
@@ -69,6 +70,21 @@
         </dependency>
     </dependencies>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>atlas-central</id>
+            <url>https://maven.atlassian.com/content/repositories/central</url>
+            <releases>
+                <checksumPolicy>fail</checksumPolicy>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <checksumPolicy>fail</checksumPolicy>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
     <build>
         <plugins>
             <plugin>
@@ -105,8 +121,28 @@
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-jgitflow-plugin</artifactId>
-                <version>1.0-alpha27</version>
+                <version>${maven-jgitflow-plugin.version}</version>
                 <configuration />
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                        <configuration>
+                            <keyname>${plugin.gpg.keyname}</keyname>
+                            <gpgArguments>
+                                <gpgArgument>--no-tty</gpgArgument>
+                            </gpgArguments>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -192,18 +228,4 @@
             </build>
         </profile>
     </profiles>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>atlas-central</id>
-            <url>https://maven.atlassian.com/content/repositories/central</url>
-            <releases>
-                <checksumPolicy>fail</checksumPolicy>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <checksumPolicy>fail</checksumPolicy>
-                <updatePolicy>never</updatePolicy>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 </project>
