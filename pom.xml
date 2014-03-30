@@ -1,12 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>es.devera.maven.plugins</groupId>
-    <artifactId>docker-maven-plugin</artifactId>
+    <artifactId>docker-maven-plugin-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>maven-plugin</packaging>
-
-    <name>docker-maven-plugin Maven Plugin</name>
+    <packaging>pom</packaging>
 
     <url>http://maven-plugins.devera.es/docker-maven-plugin</url>
 
@@ -15,113 +16,34 @@
         <developerConnection>scm:git:https://github.com/etux/docker-maven-plugin.git</developerConnection>
     </scm>
 
+    <modules>
+        <module>docker-maven-plugin</module>
+    </modules>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <docker-java.version>0.8.1</docker-java.version>
-        <junit.version>4.11</junit.version>
-        <mockito-core.version>1.9.5</mockito-core.version>
-        <slf4j-simple.version>1.7.6</slf4j-simple.version>
-        <plexus-utils.version>3.0.8</plexus-utils.version>
-        <maven-plugin-annotations.version>3.2</maven-plugin-annotations.version>
-        <commons-lang.version>2.6</commons-lang.version>
-        <maven-plugin-api.version>2.0</maven-plugin-api.version>
         <maven-jgitflow-plugin.version>1.0-alpha27</maven-jgitflow-plugin.version>
+        <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
+        <docker-java.version>0.8.1</docker-java.version>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>${commons-lang.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.kpelykh</groupId>
-            <artifactId>docker-java</artifactId>
-            <version>${docker-java.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-plugin-api</artifactId>
-            <version>${maven-plugin-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugin-tools</groupId>
-            <artifactId>maven-plugin-annotations</artifactId>
-            <version>${maven-plugin-annotations.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-utils</artifactId>
-            <version>${plexus-utils.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j-simple.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>${mockito-core.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>atlas-central</id>
-            <url>https://maven.atlassian.com/content/repositories/central</url>
-            <releases>
-                <checksumPolicy>fail</checksumPolicy>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <checksumPolicy>fail</checksumPolicy>
-                <updatePolicy>never</updatePolicy>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.kpelykh</groupId>
+                <artifactId>docker-java</artifactId>
+                <version>${docker-java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>es.devera.maven.plugins</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-plugin-plugin</artifactId>
-                <version>${maven-plugin-annotations.version}</version>
-                <configuration>
-                    <goalPrefix>docker</goalPrefix>
-                    <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>mojo-descriptor</id>
-                        <goals>
-                            <goal>descriptor</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>help-goal</id>
-                        <goals>
-                            <goal>helpmojo</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-jgitflow-plugin</artifactId>
@@ -131,7 +53,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
+                <version>${maven-gpg-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
@@ -150,4 +72,17 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>integration-tests</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <modules>
+                <module>docker-maven-plugin-it</module>
+            </modules>
+        </profile>
+    </profiles>
+
 </project>
