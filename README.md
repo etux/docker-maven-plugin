@@ -44,5 +44,3 @@ Then you can execute any goals:
 * mvn docker:killContainer -DcontainerId=&lt;containerId&gt;
 
 In case two different goals are executed as part of the same Maven session, then these two will share the containerId as long as they execute on the same thread.
-
-At the moment you need to clone the repository and compile for yourself (Working on distributing the first version to Maven Central Repository).
