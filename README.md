@@ -22,7 +22,7 @@ In order to use, add
     <plugin>
         <groupId>org.etux.maven.plugins</groupId>
         <artifactId>docker-maven-plugin</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.1</version>
         <configuration>
             <url>http://192.168.1.111:4342</url>
             <containerImage>ubuntu</containerImage>
