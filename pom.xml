@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>es.devera.maven.plugins</groupId>
     <artifactId>docker-maven-plugin-parent</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <url>http://maven-plugins.devera.es/docker-maven-plugin</url>
