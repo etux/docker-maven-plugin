@@ -16,6 +16,17 @@
         <developerConnection>scm:git:https://github.com/etux/docker-maven-plugin.git</developerConnection>
     </scm>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus-central</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>staging</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
+
     <modules>
         <module>docker-maven-plugin</module>
     </modules>
