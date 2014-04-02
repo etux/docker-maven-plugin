@@ -1,4 +1,4 @@
-package org.etux.maven.plugins.docker;
+package es.devera.maven.plugins.docker;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -221,6 +221,10 @@ public abstract class DockerMojo extends AbstractMojo {
                     String.format("Container configuration: \n%s", containerConfig.toString()));
         }
         return containerConfig;
+    }
+
+    static String getThreadLocalContainerId() {
+        return DockerMojo.tlContainerId.get();
     }
 
     String getContainerId() {

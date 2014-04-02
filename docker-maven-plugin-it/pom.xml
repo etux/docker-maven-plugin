@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>es.devera.maven.plugins</groupId>
+        <artifactId>docker-maven-plugin-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>es.devera.maven.plugins.dockert</groupId>
+    <artifactId>integration-tests</artifactId>
+
+    <description>A simple IT verifying the basic use case.</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.kpelykh</groupId>
+            <artifactId>docker-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>es.devera.maven.plugins</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>es.devera.maven.plugins</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <id>create-container</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>createContainer</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>start-container</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>startContainer</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop-container</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stopContainer</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>remove-container</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>removeContainer</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <attachedMode>true</attachedMode>
+                    <url>${docker-maven-plugin.configuration.url}</url>
+                    <containerImage>ubuntu</containerImage>
+                    <stdin>true</stdin>
+                    <stderr>true</stderr>
+                    <stdout>true</stdout>
+                    <tty>true</tty>
+                    <cmds>
+                        <param>/bin/bash</param>
+                    </cmds>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.groovy.maven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <id>execute-integration-test</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <source>${basedir}/src/test/groovy/verify.groovy</source>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <profile>
+            <id>mac</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <properties>
+                <docker-maven-plugin.configuration.url>http://localhost:4243</docker-maven-plugin.configuration.url>
+            </properties>
+        </profile>
+        <profile>
+            <id>linux</id>
+            <activation>
+                <os>
+                    <family>linux</family>
+                </os>
+            </activation>
+            <properties>
+                <docker-maven-plugin.configuration.url>http://localhost:4243</docker-maven-plugin.configuration.url>
+                <!--
+                    When unix sockets are supported.
+                    <docker-maven-plugin.configuration.url>unix://</docker-maven-plugin.configuration.url>
+                -->
+            </properties>
+        </profile>
+    </profiles>
+</project>
