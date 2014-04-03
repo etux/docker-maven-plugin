@@ -5,6 +5,8 @@
     <artifactId>docker-maven-plugin-parent</artifactId>
     <version>0.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <name>Docker maven plugin</name>
+    <description>Docker plugin for Maven that allows developers to manage docker containers.</description>
 
     <url>http://maven-plugins.devera.es/docker-maven-plugin</url>
 
@@ -12,6 +14,38 @@
         <url>scm:git:https://github.com/etux/docker-maven-plugin.git</url>
         <developerConnection>scm:git:https://github.com/etux/docker-maven-plugin.git</developerConnection>
     </scm>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>Es de Vera</name>
+        <url>http://www.devera.es</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>edevera</id>
+            <name>Eduardo de Vera Toquero</name>
+            <email>eduardo.devera@gmail.com</email>
+            <url>http://eduardo.devera.es</url>
+            <organization>Es de Vera</organization>
+            <organizationUrl>http://www.devera.es</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-6</timezone>
+            <properties>
+                <picUrl>http://tinyurl.com/prv4t</picUrl>
+            </properties>
+        </developer>
+    </developers>
 
     <distributionManagement>
         <snapshotRepository>
