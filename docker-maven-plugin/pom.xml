@@ -7,7 +7,6 @@
         <version>0.0.2</version>
     </parent>
 
-    <groupId>es.devera.maven.plugins</groupId>
     <artifactId>docker-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
 
