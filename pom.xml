@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>es.devera.maven.plugins</groupId>
     <artifactId>docker-maven-plugin-parent</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Docker maven plugin</name>
     <description>Docker plugin for Maven that allows developers to manage docker containers.</description>
