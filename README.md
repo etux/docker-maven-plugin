@@ -22,7 +22,7 @@ In order to use, add
     <plugin>
         <groupId>org.etux.maven.plugins</groupId>
         <artifactId>docker-maven-plugin</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.1</version>
         <configuration>
             <url>http://192.168.1.111:4342</url>
             <containerImage>ubuntu</containerImage>
@@ -43,6 +43,10 @@ Then you can execute any goals:
 * mvn docker:removeContainer -DcontainerId=&lt;containerId&gt;
 * mvn docker:killContainer -DcontainerId=&lt;containerId&gt;
 
+<<<<<<< HEAD
 In case two different goals are executed as part of the same Maven session, then these two will share the containerId. In fact createContainer will set the containerId in a ThreadLocal variable so that other goals of the plugin that are executed afterwards can pick it up.
 
 At the moment you need to clone the repository and compile for yourself.
+=======
+In case two different goals are executed as part of the same Maven session, then these two will share the containerId as long as they execute on the same thread.
+>>>>>>> refs/heads/release/0.0.2
